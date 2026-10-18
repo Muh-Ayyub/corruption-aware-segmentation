@@ -100,7 +100,7 @@ class PraNet(nn.Module):
     def __init__(self, channel=32):
         super(PraNet, self).__init__()
         # ---- ResNet Backbone ----
-        self.resnet = res2net50_v1b_26w_4s(pretrained=True)
+        self.resnet = res2net50_v1b_26w_4s(pretrained=False)
         # ---- Receptive Field Block like module ----
         self.rfb2_1 = RFB_modified(512, channel)
         self.rfb3_1 = RFB_modified(1024, channel)
