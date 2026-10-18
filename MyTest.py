@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import os, argparse
-from scipy import misc
+import imageio.v2 as imageio
 import matplotlib.pyplot as plt
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
@@ -93,7 +93,6 @@ for _data_name in ['VisualInspection']:
                 ax.axis("off")
 
             plt.tight_layout()
-            plt.show()
             comparison_dir = "./results/VisualInspection/comparisons"
             os.makedirs(comparison_dir, exist_ok=True)
 
@@ -102,6 +101,7 @@ for _data_name in ['VisualInspection']:
                 dpi=150,
                 bbox_inches="tight"
             )
+            plt.show()
             plt.close(fig)
 
         
@@ -109,4 +109,7 @@ for _data_name in ['VisualInspection']:
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze()
         res = (res - res.min()) / (res.max() - res.min() + 1e-8)
-        misc.imsave(save_path+name, res)
+        imageio.imwrite(
+            os.path.join(save_path, name),
+            (res * 255).astype(np.uint8)
+        )
